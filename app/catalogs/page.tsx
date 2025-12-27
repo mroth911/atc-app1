@@ -1,0 +1,1 @@
+export default function Page(){return (<div className="min-h-screen bg-slate-50 p-8"><h1 className="text-2xl font-semibold">Catalogs</h1><p className="mt-2 text-slate-600">Placeholder page. Next we’ll build this module.</p></div>);}

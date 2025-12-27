@@ -1,0 +1,972 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model CaseMng {
+  CaseMngID        Int     @id(map: "CaseMng$PrimaryKey") @default(autoincrement())
+  CaseMngPhone     String? @db.NVarChar(50)
+  CaseMngExtension String? @db.NVarChar(5)
+  CaseMngFirstName String? @db.NVarChar(23)
+  CaseMngLastName  String? @db.NVarChar(23)
+  CaseMngNote      String? @db.NVarChar(100)
+
+  @@index([CaseMngID], map: "CaseMng$CaseMngID1")
+}
+
+model CheckDetail {
+  CheckDetailID   Int                      @id(map: "CheckDetail$PrimaryKey") @default(autoincrement())
+  CheckID         Int                      @default(0, map: "DF__CheckDeta__Check__025D5595")
+  CheckDetailDate DateTime?
+  DocNumber       String?                  @db.NVarChar(20)
+  AccountNumber   String?                  @db.NVarChar(20)
+  CheckDetAmount  Float?                   @default(0, map: "DF__CheckDeta__Check__035179CE") @db.Real
+  SSMA_TimeStamp  Unsupported("timestamp")
+
+  @@index([CheckDetailID], map: "CheckDetail$CheckDetailID")
+  @@index([CheckID], map: "CheckDetail$CheckID")
+}
+
+model CheckTitle {
+  CheckId           Int                      @id(map: "CheckTitle$PrimaryKey") @default(autoincrement())
+  CheckDate         DateTime?
+  DocumentNumber    String?                  @db.NVarChar(30)
+  CheckFrom         String?                  @db.NVarChar(20)
+  CheckAmount       Float?                   @default(0, map: "DF__CheckTitl__Check__04459E07") @db.Real
+  DetailAmountTotal Float?                   @default(0, map: "DF__CheckTitl__Detai__0539C240") @db.Real
+  Notes             String?                  @db.NVarChar(50)
+  SSMA_TimeStamp    Unsupported("timestamp")
+
+  @@index([CheckId], map: "CheckTitle$CheckId")
+}
+
+model Client {
+  SSN       String    @id(map: "Client$PrimaryKey") @db.NVarChar(9)
+  FirstName String?   @db.NVarChar(30)
+  LastName  String?   @db.NVarChar(30)
+  Home      String?   @db.NVarChar(10)
+  Street    String?   @db.NVarChar(30)
+  Apt       String?   @db.NVarChar(20)
+  Town      String?   @db.NVarChar(15)
+  State     String?   @default("CT", map: "DF__Client__State__062DE679") @db.NVarChar(2)
+  Zip       String?   @db.NVarChar(15)
+  Phone     String?   @db.NVarChar(30)
+  DOB       DateTime?
+  Gender    String?   @db.NVarChar(1)
+}
+
+model Client2 {
+  SSN             String                   @id(map: "Client2$PrimaryKey") @db.NVarChar(9)
+  Note            String?                  @db.NVarChar(60)
+  CCCINum         String?                  @db.NVarChar(10)
+  Medicaid        String?                  @db.NVarChar(10)
+  FundNum         String?                  @db.NVarChar(3)
+  CaseManagerID   Int?                     @default(0, map: "DF__Client2__CaseMan__07220AB2")
+  Diagnos         String?                  @db.NVarChar(255)
+  EffDate         DateTime?
+  ExpDate         DateTime?
+  HoursNotes      String?                  @db.NVarChar(50)
+  ADCDays         Float?                   @default(0, map: "DF__Client2__ADCDays__08162EEB") @db.Real
+  ADCNotes        String?                  @db.NVarChar(25)
+  MOWNotes        String?                  @db.NVarChar(50)
+  DSS             Int?                     @default(0, map: "DF__Client2__DSS__090A5324")
+  OfficeNumber    String?                  @db.NVarChar(10)
+  EmergencyName   String?                  @db.NVarChar(50)
+  EmergencyPnone  String?                  @db.NVarChar(50)
+  Status          String?                  @db.NVarChar(10)
+  BillingPayer    String?                  @db.NVarChar(50)
+  BillingAddress1 String?                  @db.NVarChar(50)
+  BillingAddress2 String?                  @db.NVarChar(50)
+  BillingCity     String?                  @db.NVarChar(50)
+  BillingZIP      String?                  @db.NVarChar(20)
+  BillingState    String?                  @db.NVarChar(2)
+  BillingNote     String?                  @db.NVarChar(200)
+  SSN0            String?                  @db.NVarChar(9)
+  DiagCode        String?                  @db.NVarChar(10)
+  ClientCategory  String?                  @db.NVarChar(5)
+  ICD9            String?                  @db.NVarChar(20)
+  ICD10           String?                  @db.NVarChar(20)
+  SSMA_TimeStamp  Unsupported("timestamp")
+
+  @@index([CaseManagerID], map: "Client2$CaseNamagerID")
+  @@index([CCCINum], map: "Client2$CCCINum")
+  @@index([DiagCode], map: "Client2$DiagCode")
+  @@index([FundNum], map: "Client2$FundNum")
+  @@index([Medicaid], map: "Client2$Medicaid")
+}
+
+model ClientAssignedHour {
+  RecID          Int                      @id(map: "ClientAssignedHour$PrimaryKey") @default(autoincrement())
+  SSN            String?                  @db.NVarChar(9)
+  EffDate        DateTime?
+  ExpDate        DateTime?
+  HMWeek         Float?                   @default(0, map: "DF__ClientAss__HMWee__09FE775D") @db.Real
+  CPWeek         Float?                   @default(0, map: "DF__ClientAss__CPWee__0AF29B96") @db.Real
+  ApptWeek       Float?                   @default(0, map: "DF__ClientAss__ApptW__0BE6BFCF") @db.Real
+  CHWeek         Float?                   @default(0, map: "DF__ClientAss__CHWee__0CDAE408") @db.Real
+  LIWeek         Float?                   @default(0, map: "DF__ClientAss__LIWee__0DCF0841") @db.Real
+  ADCWeek        Float?                   @default(0, map: "DF__ClientAss__ADCWe__0EC32C7A") @db.Real
+  PCAWeek        Float?                   @default(0, map: "DF__ClientAss__PCAWe__0FB750B3") @db.Real
+  PCA12Week      Float?                   @default(0, map: "DF__ClientAss__PCA12__10AB74EC") @db.Real
+  PCA24Week      Float?                   @default(0, map: "DF__ClientAss__PCA24__119F9925") @db.Real
+  PCA24SubWeek   Float?                   @default(0, map: "DF__ClientAss__PCA24__1293BD5E") @db.Real
+  PCASubWeek     Float?                   @default(0, map: "DF__ClientAss__PCASu__1387E197") @db.Real
+  HMBiWeek       Float?                   @default(0, map: "DF__ClientAss__HMBiW__147C05D0") @db.Real
+  CPBiWeek       Float?                   @default(0, map: "DF__ClientAss__CPBiW__15702A09") @db.Real
+  HMMonth        Float?                   @default(0, map: "DF__ClientAss__HMMon__16644E42") @db.Real
+  CPMonth        Float?                   @default(0, map: "DF__ClientAss__CPMon__1758727B") @db.Real
+  MedMonth       Float?                   @default(0, map: "DF__ClientAss__MedMo__184C96B4") @db.Real
+  CHMonth        Float?                   @default(0, map: "DF__ClientAss__CHMon__1940BAED") @db.Real
+  ADCMonth       Float?                   @default(0, map: "DF__ClientAss__ADCMo__1A34DF26") @db.Real
+  PCAMonth       Float?                   @default(0, map: "DF__ClientAss__PCAMo__1B29035F") @db.Real
+  PCA12Month     Float?                   @default(0, map: "DF__ClientAss__PCA12__1C1D2798") @db.Real
+  PCA24Month     Float?                   @default(0, map: "DF__ClientAss__PCA24__1D114BD1") @db.Real
+  PCA24SubMonth  Float?                   @default(0, map: "DF__ClientAss__PCA24__1E05700A") @db.Real
+  PCABiWeek      Float?                   @default(0, map: "DF__ClientAss__PCABi__1EF99443") @db.Real
+  FCA1Week       Float?                   @default(0, map: "DF__ClientAss__FCA1W__1FEDB87C") @db.Real
+  FCA2Week       Float?                   @default(0, map: "DF__ClientAss__FCA2W__20E1DCB5") @db.Real
+  FCA3Week       Float?                   @default(0, map: "DF__ClientAss__FCA3W__21D600EE") @db.Real
+  FCA4Week       Float?                   @default(0, map: "DF__ClientAss__FCA4W__22CA2527") @db.Real
+  FCAVNWeek      Float?                   @default(0, map: "DF__ClientAss__FCAVN__23BE4960") @db.Real
+  PCARspWeek     Float?                   @default(0, map: "DF__ClientAss__PCARs__24B26D99") @db.Real
+  PCA12RspWeek   Float?                   @default(0, map: "DF__ClientAss__PCA12__25A691D2") @db.Real
+  PCA24RspWeek   Float?                   @default(0, map: "DF__ClientAss__PCA24__269AB60B") @db.Real
+  HMRspWeek      Float?                   @default(0, map: "DF__ClientAss__HMRsp__278EDA44") @db.Real
+  CPRspWeek      Float?                   @default(0, map: "DF__ClientAss__CPRsp__2882FE7D") @db.Real
+  SSMA_TimeStamp Unsupported("timestamp")
+
+  @@index([RecID], map: "ClientAssignedHour$RecID")
+  @@index([SSN], map: "ClientAssignedHour$SSN")
+}
+
+model ClientAssignedHourExtra {
+  RecID          Int                      @id(map: "ClientAssignedHourExtra$PrimaryKey") @default(autoincrement())
+  SSN            String?                  @db.NVarChar(9)
+  Year           Int?                     @default(0, map: "DF__ClientAssi__Year__297722B6")
+  MonthID        Int?                     @default(0, map: "DF__ClientAss__Month__2A6B46EF")
+  HM             Float?                   @default(0, map: "DF__ClientAssign__HM__2B5F6B28") @db.Real
+  CP             Float?                   @default(0, map: "DF__ClientAssign__CP__2C538F61") @db.Real
+  CH             Float?                   @default(0, map: "DF__ClientAssign__CH__2D47B39A") @db.Real
+  ADC            Float?                   @default(0, map: "DF__ClientAssig__ADC__2E3BD7D3") @db.Real
+  PCA            Float?                   @default(0, map: "DF__ClientAssig__PCA__2F2FFC0C") @db.Real
+  PCA12          Float?                   @default(0, map: "DF__ClientAss__PCA12__30242045") @db.Real
+  PCA24          Float?                   @default(0, map: "DF__ClientAss__PCA24__3118447E") @db.Real
+  PCA24Sub       Float?                   @default(0, map: "DF__ClientAss__PCA24__320C68B7") @db.Real
+  PCARsp         Float?                   @default(0, map: "DF__ClientAss__PCARs__33008CF0") @db.Real
+  SSMA_TimeStamp Unsupported("timestamp")
+
+  @@index([SSN, Year, MonthID], map: "ClientAssignedHourExtra$ClientYM")
+}
+
+model ClientMedStatus {
+  RecID                               Int       @id(map: "ClientMedStatus$PrimaryKey") @default(autoincrement())
+  SSN                                 String?   @db.NVarChar(9)
+  EffDate                             DateTime?
+  Living_Arrangments                  String?   @db.NVarChar(100)
+  Assisted_Appliance                  String?   @db.NVarChar(100)
+  Function_Limitation                 String?   @db.NVarChar(100)
+  Behavior_Issues                     String?   @db.NVarChar(100)
+  Mental_Status                       String?   @db.NVarChar(100)
+  Diet                                String?   @db.NVarChar(100)
+  Allergies                           String?   @db.NVarChar(100)
+  Telephone                           String?   @db.NVarChar(20)
+  Transportation_Ability_To_Travel    String?   @db.NVarChar(20)
+  Full_Meal_Preparation               String?   @db.NVarChar(20)
+  Light_Meal_Preparation              String?   @db.NVarChar(20)
+  Laundry                             String?   @db.NVarChar(20)
+  Legal_Financial                     String?   @db.NVarChar(20)
+  Light_Housekeepng                   String?   @db.NVarChar(20)
+  Heavy_Chores                        String?   @db.NVarChar(20)
+  Medication                          String?   @db.NVarChar(20)
+  Shopping                            String?   @db.NVarChar(20)
+  Toileting                           String?   @db.NVarChar(100)
+  Ambulation                          String?   @db.NVarChar(70)
+  Grooming                            String?   @db.NVarChar(50)
+  Eating                              String?   @db.NVarChar(50)
+  Transfering                         String?   @db.NVarChar(50)
+  Bathing                             String?   @db.NVarChar(50)
+  Dressing                            String?   @db.NVarChar(50)
+  Visit                               String?   @db.NVarChar(20)
+  Ligally_Liable                      String?   @db.NVarChar(10)
+  Understands_Documantation           String?   @db.NVarChar(10)
+  Able_To_Perform_Duties              String?   @db.NVarChar(10)
+  Caregiver_Report_Complete           String?   @db.NVarChar(10)
+  Access_To_Emergency_Numbers         String?   @db.NVarChar(10)
+  Access_ToAgency_24_Hours            String?   @db.NVarChar(10)
+  Training_Completed                  String?   @db.NVarChar(10)
+  Training_Provided_On                DateTime?
+  Confidentiality_Integrity_Behaviors String?   @db.NVarChar(55)
+  Lifting_and_Positioning_Techniques  String?   @db.NVarChar(5)
+  Medical_Asepsis_And_Handwasing      String?   @db.NVarChar(5)
+  Infection_Control                   String?   @db.NVarChar(5)
+  Bathing__And_Perineal_Care          String?   @map("Bathing _And_Perineal_Care") @db.NVarChar(5)
+  Bedpans                             String?   @db.NVarChar(5)
+  Emergency_Response                  String?   @db.NVarChar(5)
+  Hearing_Aid_And_Denture_Care        String?   @db.NVarChar(5)
+  Serving_Meals_And_Preparation       String?   @db.NVarChar(5)
+  Role_Of_PCA_And_HHA                 String?   @db.NVarChar(5)
+  Reporting_EmerncyAND_Elopements     String?   @db.NVarChar(5)
+  Kitchen_Safety_And_Food_Storage     String?   @db.NVarChar(5)
+
+  @@index([RecID], map: "ClientMedStatus$RecID1")
+}
+
+model ClientNarrativeSupervision {
+  RecId      Int       @id(map: "ClientNarrativeSupervision$PrimaryKey") @default(autoincrement())
+  SSN        String?   @db.NVarChar(9)
+  EmployeeID Int?
+  EffDate    DateTime?
+  Desc       String?   @db.NVarChar(255)
+
+  @@index([EmployeeID], map: "ClientNarrativeSupervision$EmploieeId")
+  @@index([RecId], map: "ClientNarrativeSupervision$RecId")
+}
+
+model ClientProviderReport {
+  RecID              Int                      @id(map: "ClientProviderReport$PrimaryKey") @default(autoincrement())
+  SSN                String?                  @db.NVarChar(9)
+  EffDate            DateTime?
+  ExpDate            DateTime?
+  VisitsMonth        Int?                     @default(0, map: "DF__ClientPro__Visit__33F4B129")
+  EmployeeCompanion  String?                  @db.NVarChar(50)
+  Companionship      Boolean?                 @default(false, map: "DF__ClientPro__Compa__34E8D562")
+  Errands            Boolean?                 @default(false, map: "DF__ClientPro__Erran__35DCF99B")
+  Appointment        Boolean?                 @default(false, map: "DF__ClientPro__Appoi__36D11DD4")
+  Cleaning           Boolean?                 @default(false, map: "DF__ClientPro__Clean__37C5420D")
+  Laundry            Boolean?                 @default(false, map: "DF__ClientPro__Laund__38B96646")
+  Housekeeping       Boolean?                 @default(false, map: "DF__ClientPro__House__39AD8A7F")
+  Meal               Boolean?                 @default(false, map: "DF__ClientProv__Meal__3AA1AEB8")
+  MedicalReminder    Boolean?                 @default(false, map: "DF__ClientPro__Medic__3B95D2F1")
+  Transportation     Boolean?                 @default(false, map: "DF__ClientPro__Trans__3C89F72A")
+  Yard               Boolean?                 @default(false, map: "DF__ClientProv__Yard__3D7E1B63")
+  Bathing            Boolean?                 @default(false, map: "DF__ClientPro__Bathi__3E723F9C")
+  Dressing           Boolean?                 @default(false, map: "DF__ClientPro__Dress__3F6663D5")
+  Feeding            Boolean?                 @default(false, map: "DF__ClientPro__Feedi__405A880E")
+  Walking            Boolean?                 @default(false, map: "DF__ClientPro__Walki__414EAC47")
+  Toileting          Boolean?                 @default(false, map: "DF__ClientPro__Toile__4242D080")
+  Transfering        Boolean?                 @default(false, map: "DF__ClientPro__Trans__4336F4B9")
+  Mail               Boolean?                 @default(false, map: "DF__ClientProv__Mail__442B18F2")
+  Telephone          Boolean?                 @default(false, map: "DF__ClientPro__Telep__451F3D2B")
+  Grooming           Boolean?                 @default(false, map: "DF__ClientPro__Groom__46136164")
+  SafetyChair        Boolean?                 @default(false, map: "DF__ClientPro__Safet__4707859D")
+  Chores             Boolean?                 @default(false, map: "DF__ClientPro__Chore__47FBA9D6")
+  TakeOutside        Boolean?                 @default(false, map: "DF__ClientPro__TakeO__48EFCE0F")
+  Other              String?                  @db.NVarChar(50)
+  Behavior           Boolean?                 @default(false, map: "DF__ClientPro__Behav__49E3F248")
+  Health             Boolean?                 @default(false, map: "DF__ClientPro__Healt__4AD81681")
+  Functional         Boolean?                 @default(false, map: "DF__ClientPro__Funct__4BCC3ABA")
+  CareServiceNeeds   Boolean?                 @default(false, map: "DF__ClientPro__CareS__4CC05EF3")
+  Environment        Boolean?                 @default(false, map: "DF__ClientPro__Envir__4DB4832C")
+  ClientSatisfaction Boolean?                 @default(false, map: "DF__ClientPro__Clien__4EA8A765")
+  Note               String?                  @db.NVarChar(50)
+  ServiceId          Int?                     @default(10, map: "DF__ClientPro__Servi__4F9CCB9E") @db.SmallInt
+  Shopping           Boolean?                 @default(false, map: "DF__ClientPro__Shopp__5090EFD7")
+  SSMA_TimeStamp     Unsupported("timestamp")
+
+  @@index([RecID], map: "ClientProviderReport$ProviderReportID")
+  @@index([ServiceId], map: "ClientProviderReport$ServiceId")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ClientService {
+  SSN            String?                  @db.NVarChar(9)
+  EmployeeID     Int?                     @default(0, map: "DF__ClientSer__Emplo__51851410")
+  ServiceID      Int?
+  DayID          Int?
+  Time           Float?                   @db.Real
+  StartTime      DateTime?
+  EffDate        DateTime?
+  ExpDate        DateTime?
+  WeekMod        String?                  @db.NVarChar(10)
+  SSMA_TimeStamp Unsupported("timestamp")
+
+  @@index([DayID], map: "ClientService$DaID")
+  @@index([EmployeeID], map: "ClientService$EmployeeID")
+  @@index([ServiceID], map: "ClientService$ServiceID")
+  @@index([SSN], map: "ClientService$SSN")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ClientServiceHistory {
+  SSN            String?                  @db.NVarChar(9)
+  EmployeeID     Int?                     @default(0, map: "DF__ClientSer__Emplo__52793849")
+  ServiceID      Int?
+  DayID          Int?
+  Time           Float?                   @db.Real
+  StartTime      DateTime?
+  EffDate        DateTime?
+  ExpDate        DateTime?
+  WeekMod        String?                  @db.NVarChar(10)
+  SSMA_TimeStamp Unsupported("timestamp")
+
+  @@index([DayID], map: "ClientServiceHistory$DaID")
+  @@index([EmployeeID], map: "ClientServiceHistory$EmployeeID")
+  @@index([ServiceID], map: "ClientServiceHistory$ServiceID")
+  @@index([SSN], map: "ClientServiceHistory$SSN")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ClientServiceM {
+  SSN            String?                  @db.NVarChar(9)
+  EmployeeID     Int?                     @default(0, map: "DF__ClientSer__Emplo__536D5C82")
+  ServiceID      Int?
+  DayID          Int?
+  Time           Float?                   @db.Real
+  StartTime      DateTime?
+  EffDate        DateTime?
+  ExpDate        DateTime?
+  Period         Int?                     @default(0, map: "DF__ClientSer__Perio__546180BB")
+  NextService    DateTime?
+  LastService    DateTime?
+  Notes          String?                  @db.NVarChar(50)
+  ServiceTypeCd  String?                  @default("M", map: "DF__ClientSer__Servi__5555A4F4") @db.NVarChar(2)
+  SSMA_TimeStamp Unsupported("timestamp")
+
+  @@index([DayID], map: "ClientServiceM$DaID")
+  @@index([EmployeeID], map: "ClientServiceM$EmployeeID")
+  @@index([ServiceID], map: "ClientServiceM$ServiceID")
+  @@index([SSN], map: "ClientServiceM$SSN")
+  @@ignore
+}
+
+model ClientServiceMDone {
+  RecID          Int                      @id(map: "ClientServiceMDone$PrimaryKey") @default(autoincrement())
+  SSN            String?                  @db.NVarChar(9)
+  ServiceDate    DateTime?
+  ServiceIDGroup Int?
+  EmployeeID     Int?
+  Time           Float?
+  ServiceTypeCd  String?                  @db.NVarChar(2)
+  Notes          String?                  @db.NVarChar(50)
+  Period         Int?                     @default(0, map: "DF__ClientSer__Perio__5649C92D")
+  Schedule       String?                  @db.NVarChar(255)
+  SSMA_TimeStamp Unsupported("timestamp")
+
+  @@index([EmployeeID], map: "ClientServiceMDone$EmployeeID")
+  @@index([RecID], map: "ClientServiceMDone$RecID")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ClientServiceOrder {
+  RecID          Int                      @default(autoincrement())
+  SSN            String?                  @db.NVarChar(9)
+  EffDate        DateTime?
+  ExpDate        DateTime?
+  ServiceId      String?                  @db.NVarChar(10)
+  Note           String?                  @db.NVarChar(255)
+  HoursUnits     Float?                   @db.Real
+  Days           Float?                   @db.Real
+  Freq           String?                  @db.NVarChar(20)
+  Status         String?                  @db.NVarChar(10)
+  VendorCode     String?                  @db.NVarChar(10)
+  BatchDate      DateTime?
+  CancelDate     DateTime?
+  PhoneDate      DateTime?
+  SONumber       String?                  @db.NVarChar(50)
+  SOTypeNVC      String?                  @db.NVarChar(1)
+  SOModifier     String?                  @db.NVarChar(10)
+  SSMA_TimeStamp Unsupported("timestamp")
+
+  @@index([RecID], map: "ClientServiceOrder$RecID")
+  @@index([ServiceId], map: "ClientServiceOrder$ServiceId")
+  @@index([VendorCode], map: "ClientServiceOrder$VendorCode")
+  @@ignore
+}
+
+model EDI_837P_ISA {
+  RecID         Int     @id(map: "EDI_837P_ISA$PrimaryKey") @default(autoincrement())
+  SegID         String? @db.NVarChar(3)
+  ElementID     String? @db.NVarChar(2)
+  ElementValue  String? @db.NVarChar(70)
+  ElementLength Int?    @default(0, map: "DF__EDI_837P___Eleme__573DED66") @db.SmallInt
+  ElementFormat String? @db.NVarChar(10)
+
+  @@index([ElementID], map: "EDI_837P_ISA$FieldID")
+  @@index([RecID], map: "EDI_837P_ISA$RecID")
+  @@index([SegID], map: "EDI_837P_ISA$SegID")
+}
+
+model EDI_837P_SegmentValue {
+  RecID        Int     @id(map: "EDI_837P_SegmentValue$PrimaryKey") @default(autoincrement())
+  LoopID       String? @db.NVarChar(10)
+  SegID        String? @db.NVarChar(3)
+  ElementID    String? @db.NVarChar(2)
+  ElementValue String? @db.NVarChar(70)
+
+  @@index([ElementID], map: "EDI_837P_SegmentValue$FieldID")
+  @@index([LoopID], map: "EDI_837P_SegmentValue$LoopID")
+  @@index([RecID], map: "EDI_837P_SegmentValue$RecID")
+  @@index([SegID], map: "EDI_837P_SegmentValue$SegID")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model EDI_Batch {
+  BatchNum Int? @default(0, map: "DF__EDI_Batch__Batch__5832119F")
+
+  @@index([BatchNum], map: "EDI_Batch$BatchNum")
+  @@ignore
+}
+
+model EDI_Processor {
+  RecNo                  Int     @id(map: "EDI_Processor$PrimaryKey") @default(autoincrement())
+  ProcessorID            String? @unique(map: "EDI_Processor$PROCESSOR_SAK") @db.NVarChar(2)
+  ProcessorType          String? @db.NVarChar(20)
+  PROCESSOR_NAME         String? @db.NVarChar(35)
+  PROCESSOR_ETIN         String? @db.NVarChar(15)
+  PROCESSOR_ID_QUALIFIER String? @db.NVarChar(2)
+  PROCESSOR_ID_CODE      String? @db.NVarChar(35)
+  ContactName            String? @db.NVarChar(50)
+  ContactPhone           String? @db.NVarChar(20)
+  ContactFax             String? @db.NVarChar(20)
+  ContactEmail           String? @db.NVarChar(50)
+
+  @@index([PROCESSOR_ID_CODE], map: "EDI_Processor$PROCESSOR_ID_CODE")
+}
+
+model EDI_Provider {
+  RecNo               Int     @id(map: "EDI_Provider$PrimaryKey") @default(autoincrement())
+  Prov_Code           String? @db.NVarChar(2)
+  Prov_Type           String? @db.NVarChar(25)
+  LNAME               String? @db.NVarChar(35)
+  TAX_ID              String? @db.NVarChar(12)
+  UPIN_USIN           String? @db.NVarChar(6)
+  MEDICAD_NO          String? @db.NVarChar(15)
+  PROV_NUM_1          String? @db.NVarChar(15)
+  PROV_NUM_2          String? @db.NVarChar(15)
+  SPECIALTY           String? @db.NVarChar(3)
+  SPE_LIC_NO          String? @db.NVarChar(15)
+  ST_LIC_NO           String? @db.NVarChar(15)
+  TAXONOMY_CD         String? @db.NVarChar(10)
+  PROV_ID_QUALIFIER   String? @db.NVarChar(2)
+  PROV_FNAME          String? @db.NVarChar(25)
+  PROV_TYPE_QUALIFIER String? @db.NVarChar(1)
+  ADDR_LINE1          String? @db.NVarChar(55)
+  ADDR_LINE2          String? @db.NVarChar(55)
+  ADDR_CITY           String? @db.NVarChar(30)
+  ADDR_STATE          String? @db.NVarChar(2)
+  ADDR_ZIP            String? @db.NVarChar(10)
+  TAXID_SSN_QUALIFIER String? @db.NVarChar(2)
+  NPI                 String? @db.NVarChar(10)
+  AVRS                String? @db.NVarChar(9)
+
+  @@unique([MEDICAD_NO, TAXONOMY_CD, ADDR_ZIP], map: "EDI_Provider$medicad_no")
+  @@index([Prov_Code], map: "EDI_Provider$PROV_CODE")
+  @@index([TAX_ID], map: "EDI_Provider$TAX_ID")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model EmplMileage {
+  EmployeeID     Int?                     @default(0, map: "DF__EmplMilea__Emplo__592635D8")
+  EffDate        DateTime?
+  ExpDate        DateTime?
+  Price          Float?                   @default(0, map: "DF__EmplMilea__Price__5A1A5A11")
+  Note           String?                  @db.NVarChar(255)
+  SSMA_TimeStamp Unsupported("timestamp")
+
+  @@index([EmployeeID], map: "EmplMileage$EmployeeID")
+  @@ignore
+}
+
+model EmplNarrative {
+  RecId       Int       @id(map: "EmplNarrative$PrimaryKey") @default(autoincrement())
+  EmployeeID  Int?      @default(0, map: "DF__EmplNarra__Emplo__5B0E7E4A")
+  Description String?   @db.NVarChar(255)
+  EffDate     DateTime?
+
+  @@index([EmployeeID], map: "EmplNarrative$EmployeeID")
+  @@index([RecId], map: "EmplNarrative$RecId")
+}
+
+model Employee {
+  EmployeeID              Int                      @id(map: "Employee$PrimaryKey") @default(autoincrement())
+  SSN                     String?                  @unique(map: "Employee$SS #") @db.NVarChar(9)
+  First_Name              String?                  @map("First Name") @db.NVarChar(30)
+  Mid_Initial             String?                  @map("Mid Initial") @db.NVarChar(1)
+  Last_Name               String?                  @map("Last Name") @db.NVarChar(30)
+  Gender                  String?                  @db.NVarChar(1)
+  DOB                     DateTime?
+  Home                    String?                  @db.NVarChar(10)
+  Street                  String?                  @db.NVarChar(30)
+  Apt                     String?                  @db.NVarChar(10)
+  Town                    String?                  @db.NVarChar(15)
+  State                   String?                  @default("CT", map: "DF__Employee__State__5C02A283") @db.NVarChar(2)
+  Zip_Code                String?                  @map("Zip Code") @db.NVarChar(15)
+  HomePhone               String?                  @db.NVarChar(10)
+  WorkPhone               String?                  @db.NVarChar(10)
+  Cell                    String?                  @db.NVarChar(10)
+  E_mail                  String?                  @map("E-mail") @db.NVarChar(30)
+  Reference               String?                  @db.NVarChar(30)
+  Rate1                   Float?                   @db.Real
+  Rate2                   Float?                   @db.Real
+  Rate3                   Float?                   @db.Real
+  Rate4                   Float?                   @default(0, map: "DF__Employee__Rate4__5CF6C6BC") @db.Real
+  Hours4                  Float?                   @default(0, map: "DF__Employee__Hours4__5DEAEAF5") @db.Real
+  DateHire                DateTime?
+  DateLast                DateTime?
+  Position                String?                  @db.NVarChar(50)
+  EmrgContactName         String?                  @db.NVarChar(50)
+  EmrgContactPhone        String?                  @db.NVarChar(50)
+  PrimaryLanguageID       Int?                     @default(0, map: "DF__Employee__Primar__5EDF0F2E")
+  SecondaryLanguageID     Int?                     @default(0, map: "DF__Employee__Second__5FD33367")
+  Status                  String?                  @db.NVarChar(15)
+  MarritalStatus          String?                  @db.NVarChar(25)
+  FamilyStatus            String?                  @db.NVarChar(50)
+  FullTime                String?                  @db.NVarChar(50)
+  Note                    String?                  @db.NVarChar(100)
+  EmpAuthorizationEndDate DateTime?
+  DriverLicenseEndDate    DateTime?
+  Dept                    String?                  @db.NVarChar(10)
+  Hours                   Float?                   @default(0, map: "DF__Employee__Hours__60C757A0") @db.Real
+  ValidDocType            String?                  @db.NVarChar(20)
+  ValidDocEndDate         DateTime?
+  PositionEVV             String?                  @db.NVarChar(6)
+  CarRegistrationEndDate  DateTime?
+  CarInsuranceEndDate     DateTime?
+  EmployeeID_FK           Int?
+  ResignationReason       String?                  @db.NVarChar(10)
+  PayrollNote             String?                  @db.NVarChar(100)
+  EvaluationDt            DateTime?
+  Vax                     String?                  @db.NVarChar(3)
+  SSMA_TimeStamp          Unsupported("timestamp")
+
+  @@index([PrimaryLanguageID], map: "Employee$PrimaryLanguageID")
+  @@index([SecondaryLanguageID], map: "Employee$SecondaryLanguageID")
+  @@index([Zip_Code], map: "Employee$Zip Code")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model EmplRateOverride {
+  EmployeeID     Int?                     @default(0, map: "DF__EmplRateO__Emplo__61BB7BD9")
+  EffDate        DateTime?
+  ExpDate        DateTime?
+  RateOverride   Boolean?                 @default(false, map: "DF__EmplRateO__RateO__62AFA012")
+  Note           String?                  @db.NVarChar(255)
+  SSMA_TimeStamp Unsupported("timestamp")
+
+  @@index([EmployeeID], map: "EmplRateOverride$EmployeeID")
+  @@ignore
+}
+
+model EmplVacation {
+  EmplVacationRecID Int                      @id(map: "EmplVacation$PrimaryKey") @default(autoincrement())
+  EmployeeID        Int?                     @default(0, map: "DF__EmplVacat__Emplo__63A3C44B")
+  StartDate         DateTime?
+  EndDate           DateTime?
+  Notes             String?                  @db.NVarChar(100)
+  Submit            Boolean?                 @default(false, map: "DF__EmplVacat__Submi__6497E884")
+  SSMA_TimeStamp    Unsupported("timestamp")
+
+  @@index([EmployeeID], map: "EmplVacation$EmployeeID")
+  @@index([EmplVacationRecID], map: "EmplVacation$EmplVacationID")
+}
+
+model EmplVacationSubstitute {
+  SubstituteRecID    Int                      @id(map: "EmplVacationSubstitute$PrimaryKey") @default(autoincrement())
+  SubstituteSumRecID Int?                     @default(0, map: "DF__EmplVacat__Subst__658C0CBD")
+  EmplVacationRecID  Int?                     @default(0, map: "DF__EmplVacat__EmplV__668030F6")
+  SSN                String?                  @db.NVarChar(9)
+  EmployeeID         Int?                     @default(0, map: "DF__EmplVacat__Emplo__6774552F")
+  ServiceID          Int?
+  DayID              Int?
+  Time               Float?                   @db.Real
+  StartTime          DateTime?
+  EffDate            DateTime?
+  ExpDate            DateTime?
+  SSMA_TimeStamp     Unsupported("timestamp")
+
+  @@index([DayID], map: "EmplVacationSubstitute$DayID")
+  @@index([EmployeeID], map: "EmplVacationSubstitute$EmployeeID")
+  @@index([EmplVacationRecID], map: "EmplVacationSubstitute$EmplVacationRecID")
+  @@index([ServiceID], map: "EmplVacationSubstitute$ServiceID")
+  @@index([SSN], map: "EmplVacationSubstitute$SSN")
+  @@index([SubstituteRecID], map: "EmplVacationSubstitute$SubstituteRecID")
+  @@index([SubstituteSumRecID], map: "EmplVacationSubstitute$SubstituteSumRecID")
+}
+
+model EmplVacationSubstituteSum {
+  SubstituteSumRecID Int     @id(map: "EmplVacationSubstituteSum$PrimaryKey") @default(autoincrement())
+  EmplVacationRecID  Int?    @default(0, map: "DF__EmplVacat__EmplV__68687968")
+  SSN                String? @db.NVarChar(9)
+  EmployeeID         Int?    @default(0, map: "DF__EmplVacat__Emplo__695C9DA1")
+
+  @@index([EmployeeID], map: "EmplVacationSubstituteSum$EmployeeID")
+  @@index([EmplVacationRecID], map: "EmplVacationSubstituteSum$EmplVacationRecID")
+  @@index([SSN], map: "EmplVacationSubstituteSum$SSN")
+  @@index([SubstituteSumRecID], map: "EmplVacationSubstituteSum$SubstituteRecID")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model EVV_Visit {
+  RecID                   Int                      @default(autoincrement())
+  StaffFirstName          String?                  @db.NVarChar(25)
+  StaffLastName           String?                  @db.NVarChar(50)
+  StaffMI                 String?                  @db.NVarChar(1)
+  StaffAgencyID           Int?
+  StaffAPI                String?                  @db.NVarChar(255)
+  StaffOtherID2           Int?
+  ClientFirstName         String?                  @db.NVarChar(25)
+  StaffTeamID             String?                  @db.NVarChar(6)
+  ClientLastName          String?                  @db.NVarChar(50)
+  ClientMI                String?                  @db.NVarChar(1)
+  ClientChartID           String?                  @db.NVarChar(25)
+  ClientAdmitType         String?                  @db.NVarChar(25)
+  ClientOtherID           String?                  @db.NVarChar(25)
+  LocationID              String?                  @db.NVarChar(6)
+  Date                    DateTime?
+  TypeID                  String?                  @db.NVarChar(6)
+  ScheduleID              Int?                     @default(0, map: "DF__EVV_Visit__Sched__6A50C1DA")
+  ServiceID               String?                  @db.NVarChar(6)
+  EventID                 String?                  @db.NVarChar(6)
+  OldSchedID              String?                  @db.NVarChar(60)
+  TimeIN                  String?                  @db.NVarChar(255)
+  Proposed_Start          String?                  @map("Proposed Start") @db.NVarChar(255)
+  TimeOut                 String?                  @db.NVarChar(255)
+  Proposed_End            String?                  @map("Proposed End") @db.NVarChar(255)
+  Duration                Float?                   @db.Real
+  Timezone                String?                  @db.NVarChar(6)
+  Override                Int?
+  Comments                String?                  @db.NVarChar(240)
+  TaskID                  String?                  @db.NVarChar(240)
+  Task_Notes              String?                  @map("Task Notes") @db.NVarChar(255)
+  Reason_Code             String?                  @map("Reason Code") @db.NVarChar(6)
+  Task_Notes_Type         String?                  @map("Task Notes Type") @db.NVarChar(150)
+  Reason_Code_Description String?                  @map("Reason Code Description") @db.NVarChar(240)
+  Batch                   DateTime?
+  FileName                String?                  @db.NVarChar(50)
+  StartTime               DateTime?                @default(dbgenerated("12/30/1899"), map: "DF__EVV_Visit__Start__6B44E613")
+  EndTime                 DateTime?                @default(dbgenerated("12/30/1899"), map: "DF__EVV_Visit__EndTi__6C390A4C")
+  SSN                     String?                  @db.NVarChar(9)
+  ServiceIDGroup          Int?
+  Duplicate               Boolean?                 @default(false, map: "DF__EVV_Visit__Dupli__6D2D2E85")
+  DurationPay             Float?                   @default(0, map: "DF__EVV_Visit__Durat__6E2152BE") @db.Real
+  Slip24                  Boolean?                 @default(false, map: "DF__EVV_Visit__Slip2__6F1576F7")
+  SSMA_TimeStamp          Unsupported("timestamp")
+
+  @@index([ClientChartID], map: "EVV_Visit$ClientChartID")
+  @@index([ClientOtherID], map: "EVV_Visit$ClientOtherID")
+  @@index([EventID], map: "EVV_Visit$EventID")
+  @@index([LocationID], map: "EVV_Visit$LocationID")
+  @@index([OldSchedID], map: "EVV_Visit$OldSchedID")
+  @@index([Reason_Code], map: "EVV_Visit$Reason Code")
+  @@index([RecID], map: "EVV_Visit$RecID")
+  @@index([ScheduleID], map: "EVV_Visit$ScheduleID")
+  @@index([ServiceID], map: "EVV_Visit$ServiceID")
+  @@index([StaffAgencyID], map: "EVV_Visit$StaffAgencyID")
+  @@index([StaffTeamID], map: "EVV_Visit$StaffTeamID")
+  @@index([TaskID], map: "EVV_Visit$TaskID")
+  @@index([TypeID], map: "EVV_Visit$TypeID")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model EVVPr {
+  id             String                   @db.NVarChar(11)
+  det            String?                  @db.NVarChar(255)
+  amount         String?                  @db.NVarChar(255)
+  detcode        String?                  @db.NVarChar(255)
+  hours          Float?
+  cc1            String?                  @db.NVarChar(255)
+  rate           Int?
+  ratecode       String?                  @db.NVarChar(255)
+  cc2            String?                  @db.NVarChar(255)
+  cc3            String?                  @db.NVarChar(255)
+  cc4            String?                  @db.NVarChar(255)
+  begin_date     DateTime?                @map("begin date")
+  jobcode        String?                  @db.NVarChar(255)
+  shift          String?                  @db.NVarChar(255)
+  end_date       DateTime?                @map("end date")
+  wwc            String?                  @db.NVarChar(255)
+  tcode1         String?                  @db.NVarChar(255)
+  tcode2         String?                  @db.NVarChar(255)
+  comment        Int?
+  tcode3         String?                  @db.NVarChar(255)
+  tcode4         String?                  @db.NVarChar(255)
+  wcc            String?                  @db.NVarChar(255)
+  BaseRate       Float?
+  WageParity     String?                  @db.NVarChar(255)
+  SSMA_TimeStamp Unsupported("timestamp")
+
+  @@index([detcode], map: "EVVPr$detcode")
+  @@index([id], map: "EVVPr$id")
+  @@index([jobcode], map: "EVVPr$jobcode")
+  @@index([ratecode], map: "EVVPr$ratecode")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model FCARate {
+  EffDate        DateTime?
+  ExpDate        DateTime?
+  ServiceID      Int?                     @default(0, map: "DF__FCARate__Service__70099B30") @db.SmallInt
+  Rate           Float?                   @default(0, map: "DF__FCARate__Rate__70FDBF69")
+  Note           String?                  @db.NVarChar(255)
+  SSMA_TimeStamp Unsupported("timestamp")
+
+  @@index([ServiceID], map: "FCARate$ServiceID")
+  @@ignore
+}
+
+model Firm {
+  FirmID          Int     @id(map: "Firm$PrimaryKey") @default(autoincrement())
+  FirmName        String? @db.NVarChar(50)
+  FirmCode        String? @db.NVarChar(2)
+  Address         String? @db.NVarChar(50)
+  Telephone       String? @db.NVarChar(50)
+  Fax             String? @db.NVarChar(50)
+  ProviderNoCCCI  String? @db.NVarChar(50)
+  ProviderNoDSS   String? @db.NVarChar(50)
+  Manager         String? @db.NVarChar(50)
+  SendFilePath    String? @db.NVarChar(50)
+  ReportFilePath  String? @db.NVarChar(50)
+  ExternalDB      String? @db.NVarChar(50)
+  ElectronicPrice String? @db.NVarChar(20)
+  ProviderFEIN    String? @db.NVarChar(50)
+  Manager2        String? @db.NVarChar(50)
+  ProviderNoPR    String? @db.NVarChar(20)
+  ProviderNoEVV   String? @db.NVarChar(20)
+  EVV_VisitDir    String? @db.NVarChar(50)
+
+  @@index([FirmCode], map: "Firm$FirmCode")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model HMOpenMonth {
+  SSN            String?                  @db.NVarChar(9)
+  ServiceDate    DateTime?
+  ServiceIDGroup Int?
+  TotalTime      Float?
+  Rate           Float?                   @default(0, map: "DF__HMOpenMont__Rate__71F1E3A2") @db.Real
+  SSMA_TimeStamp Unsupported("timestamp")
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model HMOpenWeek {
+  SSN            String?                  @db.NVarChar(9)
+  ServiceDate    DateTime?
+  ServiceIDGroup Int?
+  EmployeeID     Int?
+  Time           Float?
+  Done           Boolean?                 @default(false, map: "DF__HMOpenWeek__Done__72E607DB")
+  StartTime      DateTime?
+  EndTime        DateTime?
+  Schedule       String?                  @db.NVarChar(255)
+  Notes          String?                  @db.NVarChar(40)
+  Period         Int?                     @default(0, map: "DF__HMOpenWee__Perio__73DA2C14")
+  ServiceTypeCd  String?                  @db.NVarChar(2)
+  SSMA_TimeStamp Unsupported("timestamp")
+
+  @@index([EmployeeID], map: "HMOpenWeek$EmployeeID")
+  @@ignore
+}
+
+model HMPayRollTimeSheet {
+  ID             Int                      @id(map: "HMPayRollTimeSheet$PrimaryKey") @default(autoincrement())
+  EmployeeID     Int?                     @default(0, map: "DF__HMPayRoll__Emplo__74CE504D")
+  SSN            String?                  @db.NVarChar(9)
+  ServiceDate    DateTime?
+  ServiceIDGroup Int?                     @default(0, map: "DF__HMPayRoll__Servi__75C27486")
+  TotalTime      Float?                   @default(0, map: "DF__HMPayRoll__Total__76B698BF") @db.Real
+  Rate           Float?                   @default(0, map: "DF__HMPayRollT__Rate__77AABCF8") @db.Real
+  PayDate        DateTime?
+  Notes          String?                  @db.NVarChar(50)
+  SSMA_TimeStamp Unsupported("timestamp")
+
+  @@index([EmployeeID], map: "HMPayRollTimeSheet$EmployeeID")
+}
+
+model HMTimeSheet {
+  ID             Int                      @id(map: "HMTimeSheet$PrimaryKey") @default(autoincrement())
+  EmployeeID     Int?                     @default(0, map: "DF__HMTimeShe__Emplo__789EE131")
+  SSN            String?                  @db.NVarChar(9)
+  ServiceDate    DateTime?
+  ServiceIDGroup Int?                     @default(0, map: "DF__HMTimeShe__Servi__7993056A")
+  TotalTime      Float?                   @default(0, map: "DF__HMTimeShe__Total__7A8729A3") @db.Real
+  Rate           Float?                   @default(0, map: "DF__HMTimeShee__Rate__7B7B4DDC") @db.Real
+  PayDate        DateTime?
+  Notes          String?                  @db.NVarChar(50)
+  SSMA_TimeStamp Unsupported("timestamp")
+
+  @@index([EmployeeID], map: "HMTimeSheet$EmployeeID")
+}
+
+model ICD10 {
+  ID          Int     @id(map: "ICD10$PrimaryKey") @default(autoincrement())
+  ICD9        String? @db.NVarChar(255)
+  Description String? @db.NVarChar(255)
+  ICD10       String? @db.NVarChar(255)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Invoice {
+  InvID          Int?                     @default(0, map: "DF__Invoice__InvID__7C6F7215")
+  ServiceDate    DateTime?
+  SSN            String?                  @db.NVarChar(9)
+  ServiceIDGroup Int?                     @default(0, map: "DF__Invoice__Service__7D63964E")
+  TotalTime      Float?                   @db.Real
+  UnpaidTime     Float?                   @default(0, map: "DF__Invoice__UnpaidT__7E57BA87") @db.Real
+  UnpaidCode     Int?                     @db.TinyInt
+  Charge         Float?                   @db.Real
+  Paid           Float?                   @db.Real
+  Loss           Float?                   @db.Real
+  SSMA_TimeStamp Unsupported("timestamp")
+
+  @@index([ServiceIDGroup], map: "Invoice$DietCode")
+  @@index([InvID], map: "Invoice$InvID")
+  @@index([Paid], map: "Invoice$Paid")
+  @@index([UnpaidCode], map: "Invoice$UnpaidCode")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model InvoiceReminder {
+  InvID   Int?      @default(0, map: "DF__InvoiceRe__InvID__7F4BDEC0")
+  RemDate DateTime?
+  Action  String?   @db.NVarChar(255)
+
+  @@index([InvID], map: "InvoiceReminder$InvID")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model InvoiceTitle {
+  InvID          Int                      @default(autoincrement())
+  InvMonth       Int?                     @db.SmallInt
+  InvYear        Int?                     @db.SmallInt
+  ServiceCode    String?                  @db.NVarChar(3)
+  SSN            String?                  @db.NVarChar(9)
+  DSS            Int?
+  LastName       String?                  @db.NVarChar(50)
+  FirstName      String?                  @db.NVarChar(50)
+  BillAmount     Float?                   @db.Real
+  PaidAmount     Float?                   @db.Real
+  LossAmount     Float?                   @db.Real
+  Paid           Boolean?                 @default(false, map: "DF__InvoiceTit__Paid__004002F9")
+  Notes          String?                  @db.NVarChar(20)
+  CheckDetailId1 Int?
+  Amount1        Float?                   @db.Real
+  CheckDetailId2 Int?
+  Amount2        Float?                   @db.Real
+  CheckDetailId3 Int?
+  Amount3        Float?                   @db.Real
+  SSMA_TimeStamp Unsupported("timestamp")
+
+  @@index([InvID], map: "InvoiceTitle$InvID")
+  @@index([Paid], map: "InvoiceTitle$Paid")
+  @@index([ServiceCode], map: "InvoiceTitle$ServiceCode")
+  @@ignore
+}
+
+model mnuLanguage {
+  LanguageID   Int     @id(map: "mnuLanguage$PrimaryKey") @default(autoincrement())
+  LanguageDesc String? @db.NVarChar(50)
+
+  @@index([LanguageID], map: "mnuLanguage$languageID")
+}
+
+model Narrative {
+  RecID       Int       @id(map: "Narrative$PrimaryKey") @default(autoincrement())
+  SSN         String?   @db.NVarChar(9)
+  EffDate     DateTime?
+  Description String?   @db.NVarChar(255)
+
+  @@index([RecID], map: "Narrative$RecID1")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PriceList {
+  EffDate        DateTime?
+  ExpDate        DateTime?
+  ServiceID      Int?                     @default(0, map: "DF__PriceList__Servi__01342732") @db.SmallInt
+  ServiceCode    String?                  @db.NVarChar(10)
+  ServiceCodeHP  String?                  @db.NVarChar(10)
+  Price          Float?                   @default(0, map: "DF__PriceList__Price__02284B6B")
+  Price2         Float?                   @default(0, map: "DF__PriceList__Price__031C6FA4")
+  Notes          String?                  @db.NVarChar(40)
+  SSMA_TimeStamp Unsupported("timestamp")
+
+  @@index([ServiceCode], map: "PriceList$ServiceCode")
+  @@index([ServiceID], map: "PriceList$ServiceID")
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PriceListPrivate {
+  EffDate        DateTime?
+  ExpDate        DateTime?
+  SSN            String?                  @db.NVarChar(9)
+  ServiceID      Int?                     @default(0, map: "DF__PriceList__Servi__041093DD") @db.SmallInt
+  ServiceCode    String?                  @db.NVarChar(10)
+  Price          Float?                   @default(0, map: "DF__PriceList__Price__0504B816") @db.Real
+  Notes          String?                  @db.NVarChar(25)
+  SSMA_TimeStamp Unsupported("timestamp")
+
+  @@index([ServiceCode], map: "PriceListPrivate$ServiceCode")
+  @@index([ServiceID], map: "PriceListPrivate$ServiceID")
+  @@index([SSN], map: "PriceListPrivate$SSN")
+  @@ignore
+}
+
+model Reminder {
+  ID             Int                      @id(map: "Reminder$PrimaryKey") @default(autoincrement())
+  RemDate        DateTime?
+  SSN            String?                  @db.NVarChar(9)
+  Text           String?                  @db.NVarChar(255)
+  ActionDate     DateTime?
+  Active         Boolean?                 @default(false, map: "DF__Reminder__Active__05F8DC4F")
+  Action         String?                  @db.NVarChar(80)
+  Result         String?                  @db.NVarChar(80)
+  SSMA_TimeStamp Unsupported("timestamp")
+}
+
+model ServiceCatalog {
+  ServiceID      Int                      @id(map: "ServiceCatalog$PrimaryKey") @default(0, map: "DF__ServiceCa__Servi__06ED0088")
+  Service        String?                  @db.NVarChar(50)
+  Frequency      Int?                     @default(0, map: "DF__ServiceCa__Frequ__07E124C1") @db.SmallInt
+  UnitHrs        Float?                   @default(0, map: "DF__ServiceCa__UnitH__08D548FA") @db.Real
+  ServiceAbbr    String?                  @db.NVarChar(15)
+  ServiceDesc2   String?                  @db.NVarChar(50)
+  SSMA_TimeStamp Unsupported("timestamp")
+
+  @@index([ServiceID], map: "ServiceCatalog$SErviceID")
+}
+
+model ServiceOrderCatalog {
+  ServiceID   String  @id(map: "ServiceOrderCatalog$PrimaryKey") @db.NVarChar(10)
+  Service     String? @db.NVarChar(50)
+  Frequency   Int?    @default(0, map: "DF__ServiceOr__Frequ__09C96D33") @db.SmallInt
+  TaskGroupID String? @db.NVarChar(10)
+
+  @@index([TaskGroupID], map: "ServiceOrderCatalog$TaskGroupID")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Vacation {
+  SSN            String?                  @db.NVarChar(9)
+  From           DateTime?
+  To             DateTime?
+  HM             Boolean?                 @default(false, map: "DF__Vacation__HM__0ABD916C")
+  ADC            Boolean?                 @default(false, map: "DF__Vacation__ADC__0BB1B5A5")
+  Notes          String?                  @db.NVarChar(255)
+  SSMA_TimeStamp Unsupported("timestamp")
+
+  @@index([SSN], map: "Vacation$SSN")
+  @@ignore
+}
+
+model User {
+  id           String   @id
+  email        String   @unique
+  name         String?
+  passwordHash String
+  role         String   @default("user")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime
+}
